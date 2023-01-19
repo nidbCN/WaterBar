@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WaterBar.Core", "WaterBar.Core\WaterBar.Core.csproj", "{3DD1B454-74B4-4FF6-92AE-03D8D4F6C412}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3DD1B454-74B4-4FF6-92AE-03D8D4F6C412}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DD1B454-74B4-4FF6-92AE-03D8D4F6C412}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DD1B454-74B4-4FF6-92AE-03D8D4F6C412}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DD1B454-74B4-4FF6-92AE-03D8D4F6C412}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
