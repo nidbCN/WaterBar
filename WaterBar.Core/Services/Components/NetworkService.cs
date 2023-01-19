@@ -6,26 +6,36 @@ namespace WaterBar.Core.Services.Components;
 public class NetworkService : IComponentService
 {
     private readonly StatusBarOptionItem _optionItem;
-    private readonly uint _interval;
-    private readonly NetworkStatus _networkStatus;
+    private readonly NetworkStatus _status;
+
+    private DateTime _lastTime;
     private ulong _lastReceivedBytes;
     private ulong _lastSentBytes;
 
-    public NetworkService(StatusBarOptionItem optionItem, uint interval)
+    public NetworkService(StatusBarOptionItem optionItem)
     {
-        (_optionItem, _interval, _networkStatus) = (optionItem, interval, new(optionItem.Select));
+        (_optionItem, _status) = (optionItem, new(optionItem.Select));
     }
 
     public string FormatString()
     {
-        var (upSpeed, downSpeed) = ((_networkStatus.SentBytes - _lastSentBytes) / (1024 * _interval)
-            , (_networkStatus.ReceivedBytes - _lastReceivedBytes) / (1024 * _interval));
+        var now = DateTime.Now;
+        var interval = now - _lastTime;
 
-        (_lastSentBytes, _lastReceivedBytes) = (_networkStatus.SentBytes, _networkStatus.ReceivedBytes);
+        var (upSpeed, downSpeed) = (
+            (_status.SentBytes - _lastSentBytes) / (1024 * interval.TotalSeconds),
+            (_status.ReceivedBytes - _lastReceivedBytes) / (1024 * interval.TotalSeconds)
+        );
+        var (upStr, downStr) = (
+            upSpeed > 1024 ? $"{upSpeed / 1024:F2}mb/s" : $"{upSpeed:F2}kb/s",
+            downSpeed > 1024 ? $"{downSpeed / 1024:F2}mb/s" : $"{downSpeed:F2}kb/s"
+        );
+
+        (_lastSentBytes, _lastReceivedBytes, _lastTime) = (_status.SentBytes, _status.ReceivedBytes, now);
 
         return _optionItem.Format
-            .Replace("%up_speed", upSpeed > 1024 ? $"{upSpeed / 1024}mb/s" : $"{upSpeed}kb/s")
-            .Replace("%down_speed", downSpeed > 1024 ? $"{downSpeed / 1024}mb/s" : $"{downSpeed}kb/s")
-            .Replace("%speed", _networkStatus.Speed.ToString());
+            .Replace("up_speed", upStr)
+            .Replace("down_speed", downStr)
+            .Replace("bandwidth", $"{_status.Speed}Mbps");
     }
 }
