@@ -28,7 +28,7 @@ public class StatusService : IStatusService
 
 
         var servicesList = _option.Display.Select(item =>
-            _factory.GetComponentService(item, _option.Interval)
+            _factory.GetComponentService(item)
         ).ToArray();
 
         while (true)
