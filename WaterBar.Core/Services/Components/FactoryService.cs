@@ -9,6 +9,7 @@ public class FactoryService
         {
             "Network" => new NetworkService(optionItem),
             "Datetime" => new DatetimeService(optionItem),
-            _ => throw new ArgumentOutOfRangeException(nameof(optionItem.Target)),
+            "Processor" => new ProcessorService(optionItem),
+            _ => new UnknownService(optionItem),
         };
 }
