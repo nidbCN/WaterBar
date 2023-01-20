@@ -2,15 +2,17 @@ using WaterBar.Core.Options;
 
 namespace WaterBar.Core.Services.Components;
 
-public class DatetimeService : IComponentService
+public class DefaultProvider : IComponentProvider
 {
     private readonly StatusBarOptionItem _optionItem;
 
-    public DatetimeService(StatusBarOptionItem optionItem)
+    public DefaultProvider(StatusBarOptionItem optionItem)
     {
         _optionItem = optionItem;
     }
 
     public string FormatString()
-        => DateTime.Now.ToString(_optionItem.Format);
+    {
+        return _optionItem.Format;
+    }
 }

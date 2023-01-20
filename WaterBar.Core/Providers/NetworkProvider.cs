@@ -4,7 +4,7 @@ using WaterBar.Core.Options;
 
 namespace WaterBar.Core.Services.Components;
 
-public class NetworkService : IComponentService
+public class NetworkProvider : IComponentProvider
 {
     private record ReceiveAndSend(double receive, double send);
 
@@ -15,10 +15,10 @@ public class NetworkService : IComponentService
     private readonly StatusBarOptionItem _optionItem;
     private readonly NetworkStatus _status;
 
-    private DateTime _lastTime = DateTime.Now;
+    private DateTime _lastTime;
     private ReceiveAndSend _lastReceiveAndSend = new(0, 0);
 
-    public NetworkService(StatusBarOptionItem optionItem)
+    public NetworkProvider(StatusBarOptionItem optionItem)
     {
         (_optionItem, _status) = (optionItem, new(optionItem.Select));
     }
@@ -49,7 +49,7 @@ public class NetworkService : IComponentService
         {
             builder.Append(formatSpan[startIndex..(startIndex + index)]);
             builder.Append(upStr);
-            startIndex = index + UpSpeed.Length;
+            startIndex = startIndex + index + UpSpeed.Length;
         }
 
         index = formatSpan[startIndex..].IndexOf(DownSpeed);
@@ -57,7 +57,7 @@ public class NetworkService : IComponentService
         {
             builder.Append(formatSpan[startIndex..(startIndex + index)]);
             builder.Append(downStr);
-            startIndex = index + DownSpeed.Length;
+            startIndex = startIndex + index + DownSpeed.Length;
         }
 
         index = formatSpan[startIndex..].IndexOf(Bandwidth);
