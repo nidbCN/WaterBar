@@ -1,3 +1,4 @@
+using System.Text;
 using WaterBar.Core.Models;
 using WaterBar.Core.Options;
 
@@ -7,11 +8,15 @@ public class NetworkService : IComponentService
 {
     private record ReceiveAndSend(double receive, double send);
 
+    private const string UpSpeed = "up_speed";
+    private const string DownSpeed = "down_speed";
+    private const string Bandwidth = "bandwidth";
+
     private readonly StatusBarOptionItem _optionItem;
     private readonly NetworkStatus _status;
 
-    private DateTime _lastTime;
-    private ReceiveAndSend _lastReceiveAndSend;
+    private DateTime _lastTime = DateTime.Now;
+    private ReceiveAndSend _lastReceiveAndSend = new(0, 0);
 
     public NetworkService(StatusBarOptionItem optionItem)
     {
@@ -24,8 +29,8 @@ public class NetworkService : IComponentService
         var interval = now - _lastTime;
 
         var speed = new ReceiveAndSend(
-            (_status.SentBytes - _lastReceiveAndSend.receive) / (1024 * interval.TotalSeconds),
-            (_status.ReceivedBytes - _lastReceiveAndSend.send) / (1024 * interval.TotalSeconds)
+            (_status.ReceivedBytes - _lastReceiveAndSend.send) / (1024 * interval.TotalSeconds),
+            (_status.SentBytes - _lastReceiveAndSend.receive) / (1024 * interval.TotalSeconds)
         );
         var (upStr, downStr) = (
             speed.send > 1024 ? $"{speed.send / 1024:F2}mb/s" : $"{speed.send:F2}kb/s",
@@ -34,9 +39,34 @@ public class NetworkService : IComponentService
 
         (_lastReceiveAndSend, _lastTime) = (new(_status.SentBytes, _status.ReceivedBytes), now);
 
-        return _optionItem.Format
-            .Replace("up_speed", upStr)
-            .Replace("down_speed", downStr)
-            .Replace("bandwidth", $"{_status.Speed}Mbps");
+        var formatSpan = _optionItem.Format.AsSpan();
+        var builder = new StringBuilder(formatSpan.Length);
+
+        var startIndex = 0;
+
+        var index = formatSpan[startIndex..].IndexOf(UpSpeed);
+        if (index != -1)
+        {
+            builder.Append(formatSpan[startIndex..(startIndex + index)]);
+            builder.Append(upStr);
+            startIndex = index + UpSpeed.Length;
+        }
+
+        index = formatSpan[startIndex..].IndexOf(DownSpeed);
+        if (index != -1)
+        {
+            builder.Append(formatSpan[startIndex..(startIndex + index)]);
+            builder.Append(downStr);
+            startIndex = index + DownSpeed.Length;
+        }
+
+        index = formatSpan[startIndex..].IndexOf(Bandwidth);
+        if (index != -1)
+        {
+            builder.Append(formatSpan[startIndex..(startIndex + index)]);
+            builder.Append($"{_status.Bandwidth}Mbps");
+        }
+
+        return builder.ToString();
     }
 }

@@ -7,12 +7,11 @@ public class NetworkStatus
     public NetworkStatus(string interfaceName)
     {
         _interfaceName = interfaceName;
-        Speed = uint.Parse(
-            File.ReadAllText($"/sys/class/net/{_interfaceName}/speed")
-        );
     }
 
-    public uint Speed { get; }
+    public uint Bandwidth => uint.Parse(
+        File.ReadAllText($"/sys/class/net/{_interfaceName}/speed")
+    );
 
     public ulong ReceivedBytes => ulong.Parse(
         File.ReadAllText($"/sys/class/net/{_interfaceName}/statistics/rx_bytes")
