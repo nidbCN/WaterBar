@@ -1,8 +1,7 @@
-using WaterBar.Core.Options;
-
-namespace WaterBar.Core.Services.Components;
+namespace WaterBar.Core.Providers;
 
 public interface IComponentProvider
 {
     public string FormatString();
+    public Task<string> FormatStringAsync();
 }

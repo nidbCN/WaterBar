@@ -1,6 +1,6 @@
 using WaterBar.Core.Options;
 
-namespace WaterBar.Core.Services.Components;
+namespace WaterBar.Core.Providers;
 
 public class DatetimeProvider : IComponentProvider
 {
@@ -13,4 +13,7 @@ public class DatetimeProvider : IComponentProvider
 
     public string FormatString()
         => DateTime.Now.ToString(_optionItem.Format);
+
+    public Task<string> FormatStringAsync()
+        => Task.Run(FormatString);
 }

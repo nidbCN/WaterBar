@@ -8,16 +8,15 @@ namespace WaterBar.Core.Services;
 
 public class StatusService : IStatusService
 {
-    private readonly ILogger<IStatusService> _logger;
     private readonly FactoryService _factory;
     private readonly StatusBarOption _option;
 
-    public StatusService(ILogger<IStatusService> logger, FactoryService factory, IOptions<StatusBarOption> options)
+    public StatusService(FactoryService factory, IOptions<StatusBarOption> options)
     {
-        (_logger, _factory, _option) = (logger, factory, options.Value);
+        (_factory, _option) = (factory, options.Value);
     }
 
-    public void StartOutput()
+    public async Task StartOutput()
     {
         Console.WriteLine(JsonSerializer.Serialize(new
         {
@@ -26,17 +25,20 @@ public class StatusService : IStatusService
 
         Console.WriteLine("[");
 
-
         var servicesList = _option.Display.Select(item =>
             _factory.GetComponentService(item)
         ).ToArray();
 
         while (true)
         {
+            var taskList = servicesList.Select(
+                async service => new StatusItem(await service.FormatStringAsync())
+            ).ToArray();
+
+            await Task.WhenAll(taskList);
+
             Console.Write(JsonSerializer.Serialize(
-                servicesList.Select(
-                    service => new StatusItem(service.FormatString())
-                )
+                taskList.Select(task => task.Result)
             ));
             Console.Write(",\n");
 

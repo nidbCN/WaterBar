@@ -2,7 +2,7 @@ using System.Text;
 using WaterBar.Core.Models;
 using WaterBar.Core.Options;
 
-namespace WaterBar.Core.Services.Components;
+namespace WaterBar.Core.Providers;
 
 public class NetworkProvider : IComponentProvider
 {
@@ -68,5 +68,10 @@ public class NetworkProvider : IComponentProvider
         }
 
         return builder.ToString();
+    }
+
+    public Task<string> FormatStringAsync()
+    {
+        return Task.Run(FormatString);
     }
 }

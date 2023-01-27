@@ -1,6 +1,6 @@
 using WaterBar.Core.Options;
 
-namespace WaterBar.Core.Services.Components;
+namespace WaterBar.Core.Providers;
 
 public class DefaultProvider : IComponentProvider
 {
@@ -12,7 +12,8 @@ public class DefaultProvider : IComponentProvider
     }
 
     public string FormatString()
-    {
-        return _optionItem.Format;
-    }
+        => _optionItem.Format;
+
+    public Task<string> FormatStringAsync()
+        => Task.Run(FormatString);
 }

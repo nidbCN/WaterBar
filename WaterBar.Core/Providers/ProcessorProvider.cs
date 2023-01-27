@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using WaterBar.Core.Models;
 using WaterBar.Core.Options;
-using WaterBar.Core.Services.Components;
 
 namespace WaterBar.Core.Providers;
 

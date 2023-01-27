@@ -9,7 +9,7 @@ var host = Host.CreateDefaultBuilder(args)
     .ConfigureAppConfiguration(config => { configuration = config.Build(); })
     .ConfigureServices(services =>
     {
-        services.AddLogging();
+        // services.AddLogging();
         services.Configure<StatusBarOption>(
             configuration.GetSection(nameof(StatusBarOption))
         );
@@ -21,7 +21,7 @@ var host = Host.CreateDefaultBuilder(args)
 
 var statusService = host.Services.GetRequiredService<IStatusService>();
 
-statusService.StartOutput();
+await statusService.StartOutput();
 
 host.Run();
 #nullable restore

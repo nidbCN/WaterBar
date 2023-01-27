@@ -1,4 +1,6 @@
+using Microsoft.Extensions.Options;
 using WaterBar.Core.Options;
+using WaterBar.Core.Providers;
 
 namespace WaterBar.Core.Services.Components;
 
