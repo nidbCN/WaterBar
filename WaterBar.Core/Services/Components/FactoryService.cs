@@ -12,6 +12,7 @@ public class FactoryService
             "Network" => new NetworkProvider(optionItem),
             "Datetime" => new DatetimeProvider(optionItem),
             "Processor" => new ProcessorProvider(optionItem),
+            "Keyboard" => new KeyboardStatusProvider(optionItem),
             _ => new DefaultProvider(optionItem),
         };
 }

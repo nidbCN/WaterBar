@@ -12,5 +12,6 @@ public class StatusBarOptionItem
     public string Target { get; set; }
     public string Select { get; set; }
     public string Format { get; set; }
+    public string Color { get; set; }
 }
 #nullable restore

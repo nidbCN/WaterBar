@@ -1,4 +1,5 @@
 using WaterBar.Core.Options;
+using WaterBar.Core.Utils;
 
 namespace WaterBar.Core.Providers;
 
@@ -11,9 +12,6 @@ public class DefaultProvider : IComponentProvider
         _optionItem = optionItem;
     }
 
-    public string FormatString()
-        => _optionItem.Format;
-
     public Task<string> FormatStringAsync()
-        => Task.Run(FormatString);
+        => Task.Run(() => _optionItem.Format);
 }

@@ -23,7 +23,7 @@ public class NetworkProvider : IComponentProvider
         (_optionItem, _status) = (optionItem, new(optionItem.Select));
     }
 
-    public string FormatString()
+    private string FormatString()
     {
         var now = DateTime.Now;
         var interval = now - _lastTime;
